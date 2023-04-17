@@ -24,10 +24,10 @@ class CodePosServer {
     };
   }
 
-  getRowCol(x, y) {
+  static getFileRowCol(x, y) {
     x /= window.devicePixelRatio;
     y /= window.devicePixelRatio;
-    const editor = getEditorAttributes();
+    const editor = CodePosServer.getEditorAttributes();
     const col = (x - editor.editorLeft) / editor.charWidth;
     const row = (y - editor.editorTop) / editor.lineHeight;
     return {
@@ -37,11 +37,11 @@ class CodePosServer {
     };
   }
 
-  static coordsCallback(websocketEvent) {
+  coordsCallback(websocketEvent) {
     try {
       const coords = JSON.parse(websocketEvent.data);
       if ("x" in coords && "y" in coords) {
-        const rc = getRowCol(coords.x, coords.y);
+        const rc = CodePosServer.getFileRowCol(coords.x, coords.y);
         console.log("got", websocketEvent, "sending", rc);
         this.ws.send(JSON.stringify(rc));
       } else {
@@ -56,7 +56,7 @@ class CodePosServer {
 
   constructor() {
     this.ws = new WebSocket("ws://localhost:8888/websocket/");
-    this.ws.onmessage = coordsCallback;
+    this.ws.addEventListener("message", (evt) => this.coordsCallback(evt));
     this.stop = () => this.ws.close();
   }
 }
