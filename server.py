@@ -71,9 +71,10 @@ def main():
     io_loop = tornado.ioloop.IOLoop.current()
 
     async def queryRowCol():
-        pos = queryMousePosition()
-        print("querying row/col for mouse coordinates", pos)
-        WebSocketServer.send_message(json.dumps(pos))
+        if WebSocketServer.client is not None:
+            pos = queryMousePosition()
+            print("querying row/col for mouse coordinates", pos)
+            WebSocketServer.send_message(json.dumps(pos))
     
     periodic_query = tornado.ioloop.PeriodicCallback(queryRowCol, 2000.0)
     periodic_query.start()
