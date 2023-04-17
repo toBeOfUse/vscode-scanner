@@ -41,7 +41,9 @@ class WebSocketServer(tornado.websocket.WebSocketHandler):
                 cls.file_cache[file] = file_handle.readlines()
         file_lines = cls.file_cache[file]
         if row >= len(file_lines):
-            return "past end of file"
+            return "cursor past end of file"
+        elif row < 0:
+            return "cursor above editor"
         else:
             line = file_lines[row]
             if col >= len(line):
