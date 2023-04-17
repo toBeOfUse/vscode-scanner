@@ -1,10 +1,11 @@
 function getLineAttributes() {
-  const lineNumber = document.querySelector(".line-numbers");
+  const editorRegion = document.getElementById("workbench.parts.editor");
+  const lineNumber = editorRegion.querySelector(".line-numbers");
   const lineNumberBox = lineNumber.getBoundingClientRect();
-  const line = document.querySelector(".view-line").firstChild;
-  const lineBox = line.getBoundingClientRect();
-  const editor = document.querySelector(".lines-content");
+  const editor = editorRegion.querySelector(".lines-content");
   const editorBox = editor.getBoundingClientRect();
+  const line = editor.querySelector(".view-line").firstChild;
+  const lineBox = line.getBoundingClientRect();
   const editorLeft = editorBox.left;
   const lineHeight = lineNumberBox.height;
   const charWidth = lineBox.width / line.innerText.length;
@@ -16,18 +17,21 @@ function getLineAttributes() {
   };
 }
 
-window.editor = getLineAttributes();
+let editor = getLineAttributes();
 
 function getEditorTop() {
-  const editor = document.querySelector(".lines-content");
+  const editorRegion = document.getElementById("workbench.parts.editor");
+  const editor = editorRegion.querySelector(".lines-content");
   const editorBox = editor.getBoundingClientRect();
   return editorBox.top;
 }
 
-export default function getRowCol(x, y) {
+function getRowCol(x, y) {
   x /= window.devicePixelRatio;
   y /= window.devicePixelRatio;
+  const editorTop = getEditorTop();
+  console.log(editorTop);
   const col = (x - editor.editorLeft) / editor.charWidth;
-  const row = (y - getEditorTop()) / editor.lineHeight;
-  return { row: Math.round(row + 1), col: Math.round(col + 1) };
+  const row = (y - editorTop) / editor.lineHeight;
+  return { row: Math.floor(row + 1), col: Math.floor(col + 1) };
 }
