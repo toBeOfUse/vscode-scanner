@@ -35,3 +35,17 @@ function getRowCol(x, y) {
   const row = (y - editorTop) / editor.lineHeight;
   return { row: Math.floor(row + 1), col: Math.floor(col + 1) };
 }
+
+if (window.ws) {
+  window.ws.close();
+}
+window.ws = new WebSocket("ws://localhost:8888/websocket/");
+window.ws.onmessage = function (evt) {
+  console.log(evt.data);
+  const coords = JSON.parse(evt.data);
+  if ("x" in coords && "y" in coords) {
+    const rc = getRowCol(coords.x, coords.y);
+    console.log(rc);
+    ws.send(JSON.stringify(rc));
+  }
+};
