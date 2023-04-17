@@ -2,7 +2,7 @@
 
 This project uses the VSCode developer console to turn (x, y) pixel coordinates on screen into row and column numbers in a file. It communicates through a WebSocket connection. A simple Python WebSocket server is provided, which will query VSCode for the row and column of the current mouse position and print the result and a preview of that position in a file.
 
-!()[scanner.gif]
+![Image showing a cursor hovering over code, with an excerpt of the code under the cursor being regularly printed out to a console below](scanner.gif)
 
 ## How to use
 
